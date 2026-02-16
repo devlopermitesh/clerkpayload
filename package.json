@@ -8,9 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "format": "bunx prettier --write ."
-    
   },
   "dependencies": {
+    "@clerk/nextjs": "6.37.4",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
