@@ -17,6 +17,12 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      logout: {
+        Button: './components/logout#LogoutBtn',
+      },
+      providers: ['./components/provider/CustomClerkProvider#CustomeClerkProvider'],
+    },
   },
   collections: [Users, Media],
   editor: lexicalEditor(),
