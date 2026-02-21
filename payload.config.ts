@@ -7,10 +7,11 @@ import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-
+import { Post } from './collections/Post'
+import { Library } from './collections/library'
+import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -21,10 +22,11 @@ export default buildConfig({
       logout: {
         Button: './components/logout#LogoutBtn',
       },
+      afterNavLinks: ['./components/Link#UserLink'],
       providers: ['./components/provider/CustomClerkProvider#CustomeClerkProvider'],
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Post, Library],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -34,5 +36,16 @@ export default buildConfig({
     url: process.env.DATABASE_URL || '',
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    multiTenantPlugin({
+      tenantsSlug: 'librarys',
+      collections: {
+        posts: {},
+      },
+      tenantsArrayField: {
+        includeDefaultField: false,
+      },
+      userHasAccessToAllTenants: (user) => Boolean(user.role?.includes('super-admin')),
+    }),
+  ],
 })

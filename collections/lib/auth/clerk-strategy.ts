@@ -1,11 +1,21 @@
-import { auth } from '@clerk/nextjs/server'
 import type { AuthStrategy, AuthStrategyResult } from 'payload'
 
+// Only import Clerk when not generating types
+const isGeneratingTypes = process.argv.includes('generate:types')
+
 const getUser = async ({ payload }: { payload: any }) => {
+  if (isGeneratingTypes) {
+    return null
+  }
+
+  // Dynamic import to avoid issues during type generation
+  const { auth } = await import('@clerk/nextjs/server')
   const { userId } = await auth()
 
   if (!userId) return null
+
   console.log('userId', userId)
+
   const existing = await payload.find({
     collection: 'users',
     where: {
