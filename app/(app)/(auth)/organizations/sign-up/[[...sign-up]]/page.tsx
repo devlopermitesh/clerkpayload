@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 const Page = () => {
   const { isLoaded, signUp } = useSignUp()
   const { currentStep, goToNext, markStepComplete, steps } = useStepper()
-  console.log('currentstep', currentStep)
+
   useEffect(() => {
     if (!isLoaded) return
     if (steps[currentStep - 1].isCompleted) {
@@ -24,7 +24,8 @@ const Page = () => {
     ) {
       goToNext()
     }
-  }, [isLoaded, signUp?.status])
-  return <SignUp afterSignOutUrl={'/organizations/create-organization'} />
+  }, [currentStep, goToNext, isLoaded, markStepComplete, signUp.status, signUp.unverifiedFields, steps])
+
+  return <SignUp forceRedirectUrl="/organizations/create-organization" />
 }
 export default Page
