@@ -1,6 +1,8 @@
 'use client'
 
 import { createContext, useContext, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
 export type StepId = 'sign-up' | 'verify-email' | 'create-org' | 'complete'
 
@@ -59,6 +61,23 @@ const StepperContext = createContext<StepperState | null>(null)
 export const StepperFormProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentStep, setCurrentStep] = useState(1)
   const [steps, setSteps] = useState<Step[]>(DEFAULT_STEPS)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    if (!pathname.startsWith('/organizations')) return
+
+    let nextStep = 1
+
+    if (pathname.includes('/organizations/success-organization')) {
+      nextStep = 4
+    } else if (pathname.includes('/organizations/create-organization')) {
+      nextStep = 3
+    } else if (pathname.includes('/organizations/sign-up')) {
+      nextStep = 1
+    }
+
+    setCurrentStep((prev) => (prev === nextStep ? prev : nextStep))
+  }, [pathname])
 
   const markStepComplete = (id: StepId) =>
     setSteps((prev) => prev.map((s) => (s.id === id ? { ...s, isCompleted: true } : s)))
@@ -70,7 +89,7 @@ export const StepperFormProvider = ({ children }: { children: React.ReactNode })
     totalSteps: steps.length,
     goToNext: () => setCurrentStep((p) => Math.min(p + 1, steps.length)),
     goToPrev: () => setCurrentStep((p) => Math.max(p - 1, 1)),
-    goToStep: (s) => setCurrentStep(s),
+    goToStep: (s) => setCurrentStep(Math.max(1, Math.min(s, steps.length))),
     markStepComplete,
   }
 

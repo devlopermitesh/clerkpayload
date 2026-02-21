@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useStepper } from '@/modules/providers/StepperForm'
 import { useOrganization } from '@clerk/nextjs'
 import { CheckCircle2 } from 'lucide-react'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
 const Page = () => {
@@ -12,10 +12,13 @@ const Page = () => {
   const { organization } = useOrganization()
   const { currentStep, goToStep } = useStepper()
   useEffect(() => {
-    if (!organization) redirect('/')
+    if (!organization) {
+      router.replace('/')
+      return
+    }
     if (currentStep == 4) return
     goToStep(4)
-  }, [goToStep, currentStep])
+  }, [goToStep, currentStep, organization, router])
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center space-y-4">
