@@ -44,8 +44,10 @@ export default buildConfig({
       },
       tenantsArrayField: {
         includeDefaultField: false,
+        arrayFieldName: 'librarys',
+        arrayTenantFieldName: 'library',
       },
-      userHasAccessToAllTenants: (user) => Boolean(user.role?.includes('super-admin')),
+      userHasAccessToAllTenants: (user) => Boolean(user.roles?.includes('super-admin')),
     }),
   ],
 })

@@ -5,7 +5,7 @@ import { ClerkStrategy } from './lib/auth/clerk-strategy'
 import { tenantsArrayField } from '@payloadcms/plugin-multi-tenant/fields'
 import { isSuperAdmin } from './lib/access/isSuperAdmin'
 const defaultTennatField = tenantsArrayField({
-  tenantsArrayFieldName: 'libarys',
+  tenantsArrayFieldName: 'librarys',
   tenantsCollectionSlug: 'librarys',
   tenantsArrayTenantFieldName: 'library',
   arrayFieldAccess: {
@@ -20,6 +20,7 @@ const defaultTennatField = tenantsArrayField({
     update: isSuperAdmin,
   },
 })
+
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
@@ -37,12 +38,6 @@ export const Users: CollectionConfig = {
   },
   fields: [
     {
-      name: 'code',
-      type: 'text',
-      index: true,
-      unique: true,
-    },
-    {
       name: 'clerkUserId',
       label: 'Clerk userId',
       type: 'text',
@@ -51,10 +46,25 @@ export const Users: CollectionConfig = {
       index: true,
     },
     {
-      name: 'role',
+      name: 'email',
+      type: 'email',
+      required: true,
+      unique: true,
+    },
+    {
+      name: 'firstName',
+      type: 'text',
+    },
+    {
+      name: 'lastName',
+      type: 'text',
+    },
+    {
+      name: 'roles',
       type: 'select',
-      options: ['admin', 'super-admin'],
-      defaultValue: 'admin',
+      options: ['author', 'super-admin', 'user'],
+      hasMany: true,
+      defaultValue: 'user',
     },
     {
       ...defaultTennatField,

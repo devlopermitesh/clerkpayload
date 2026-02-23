@@ -124,10 +124,12 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
-  code?: string | null;
   clerkUserId: string;
-  role?: ('admin' | 'super-admin') | null;
-  libarys?:
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  roles?: ('author' | 'super-admin' | 'user')[] | null;
+  librarys?:
     | {
         library: string | Library;
         id?: string | null;
@@ -148,6 +150,8 @@ export interface Library {
    * your library url host slug.
    */
   slug: string;
+  organizationId: string;
+  logo?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -277,10 +281,12 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  code?: T;
   clerkUserId?: T;
-  role?: T;
-  libarys?:
+  email?: T;
+  firstName?: T;
+  lastName?: T;
+  roles?: T;
+  librarys?:
     | T
     | {
         library?: T;
@@ -327,6 +333,8 @@ export interface PostsSelect<T extends boolean = true> {
 export interface LibrarysSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
+  organizationId?: T;
+  logo?: T;
   updatedAt?: T;
   createdAt?: T;
 }

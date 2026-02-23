@@ -1,8 +1,16 @@
-import { withPayload } from "@payloadcms/next/withPayload";
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.ngrok-free.app',
+      },
+    ],
+  },
 
-export default withPayload(nextConfig);
+  allowedDevOrigins: ['*.ngrok-free.app'],
+}
+
+export default nextConfig

@@ -30,15 +30,7 @@ const getUser = async ({ payload }: { payload: any }) => {
     return existing.docs[0]
   }
 
-  // auto-create user
-  const created = await payload.create({
-    collection: 'users',
-    data: {
-      clerkUserId: userId,
-    },
-  })
-
-  return created
+  return null
 }
 
 const authenticate = async ({ payload }: { payload: any }): Promise<AuthStrategyResult> => {
